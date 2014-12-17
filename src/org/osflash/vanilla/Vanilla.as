@@ -21,7 +21,7 @@ package org.osflash.vanilla
 		private static const METADATA_TYPE_KEY : String = "type";
 		
 		//Cache InjectionMap instances
-		private var injectionMapCache:Dictionary = new Dictionary;
+		private var injectionMapCache:Dictionary = new Dictionary();
 		
 		/**
 		 * Attempts to extract properties from the supplied source object into an instance of the supplied targetType.
@@ -40,18 +40,13 @@ package org.osflash.vanilla
 				return source;
 			}
 			
-			if(injectionMapCache[targetType] == undefined)
+			if (!injectionMapCache[targetType]) 
 			{
-				// Construct an InjectionMap which tells us how to inject fields from the source object into 
-				// the Target class.
-				var injectionMap : InjectionMap = new InjectionMap();
-				addReflectedRules(injectionMap, targetType, Type.forClass(targetType));
-				injectionMapCache[targetType] = injectionMap;
+			    injectionMapCache[targetType] = new InjectionMap();
+			    addReflectedRules(injectionMapCache[targetType], targetType, Type.forClass(targetType));
 			}
-			else
-			{
-				injectionMap = injectionMapCache[targetType];
-			}
+			
+			const injectionMap = injectionMapCache[targetType];
 			
 			// Create a new isntance of the targetType; and then inject the values from the source object into it
 			const target : * = instantiate(targetType, fetchConstructorArgs(source, injectionMap.getConstructorFields()));
